@@ -1,0 +1,28 @@
+# ---- dépendances et builds (se régénèrent) ----
+**/node_modules/
+**/dist/
+**/target/
+**/.venv/
+__pycache__/
+*.pyc
+
+# ---- données locales / personnelles (base H2, photos envoyées par les téléphones) ----
+roadmap_api/data/
+
+# ---- WP2 : jeux de données téléchargés et sorties d'entraînement (lourds, régénérables) ----
+wp2_vision/data/
+wp2_vision/runs/
+wp2_vision/weights/
+wp2_vision/runs_train*.log
+wp2_vision/demo/*.mp4
+
+# ---- configuration locale ----
+.env
+.env.local
+.claude/
+.github/modernize/
+.idea/
+.vscode/
+
+# ---- document contractuel confidentiel (diffusion restreinte aux Parties) ----
+Contrat_RoadMap_Cartographie.pdf

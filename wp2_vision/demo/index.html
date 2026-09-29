@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Road Map · Vision WP2</title>
+<style>
+  :root {
+    --bg: #f5f6f8; --panel: #ffffff; --ink: #1c2330; --muted: #677083; --line: #e2e5eb;
+    --accent: #1f3a68; --accent-ink: #fff;
+    --low: #2e8b57; --medium: #d98a00; --high: #c9302c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #11151c; --panel: #1a2029; --ink: #e6e9ef; --muted: #98a1b3; --line: #2a3240; --accent: #5b8def; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--ink); }
+  header { padding: 18px 24px; border-bottom: 1px solid var(--line); background: var(--panel); display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  header h1 { font-size: 18px; margin: 0; }
+  header span { color: var(--muted); font-size: 13px; }
+  #status { margin-left: auto; font-size: 13px; color: var(--muted); }
+  main { display: grid; grid-template-columns: 300px 1fr 360px; gap: 16px; padding: 16px; max-width: 1500px; margin: 0 auto; }
+  @media (max-width: 1100px) { main { grid-template-columns: 1fr; } }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+  .card h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 12px; }
+  label { display: block; font-size: 13px; color: var(--muted); margin: 12px 0 4px; }
+  select, input[type=number] { width: 100%; padding: 7px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); }
+  input[type=range] { width: 100%; }
+  .check { display: flex; align-items: center; gap: 8px; color: var(--ink); margin-top: 12px; }
+  #drop { border: 2px dashed var(--line); border-radius: 10px; padding: 26px 12px; text-align: center; color: var(--muted); cursor: pointer; }
+  #drop.over { border-color: var(--accent); color: var(--accent); }
+  button { margin-top: 14px; width: 100%; padding: 10px; border: 0; border-radius: 7px; background: var(--accent); color: var(--accent-ink); font-weight: 600; cursor: pointer; }
+  button:disabled { opacity: .5; cursor: default; }
+  .stage { position: relative; min-height: 360px; display: flex; align-items: center; justify-content: center; }
+  .stage canvas { max-width: 100%; height: auto; border-radius: 6px; }
+  .empty { color: var(--muted); }
+  .banner { padding: 10px 12px; border-radius: 7px; margin-bottom: 12px; font-size: 14px; }
+  .banner.rej { background: color-mix(in srgb, var(--high) 15%, transparent); color: var(--high); }
+  .det { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; display: grid; grid-template-columns: 12px 1fr auto; gap: 10px; align-items: center; cursor: default; }
+  .det:hover { border-color: var(--accent); }
+  .swatch { width: 12px; height: 12px; border-radius: 3px; }
+  .det .t { font-weight: 600; }
+  .det .s { font-size: 12px; color: var(--muted); }
+  .pill { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 99px; color: #fff; }
+  .pill.low { background: var(--low); } .pill.medium { background: var(--medium); } .pill.high { background: var(--high); }
+  .pill.info { background: var(--muted); }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+  .stat { background: var(--bg); border-radius: 8px; padding: 8px; text-align: center; }
+  .stat b { display: block; font-size: 20px; }
+  .stat span { font-size: 12px; color: var(--muted); }
+  details { margin-top: 12px; }
+  pre { font-size: 11px; max-height: 320px; overflow: auto; background: var(--bg); padding: 10px; border-radius: 6px; }
+  .samples { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 8px; }
+  .samples img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 5px; cursor: pointer; border: 2px solid transparent; }
+  .samples img:hover { border-color: var(--accent); }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; font-size: 12px; color: var(--muted); margin-top: 10px; }
+  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: middle; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Road Map — Détection des dégradations</h1>
+  <span>WP2 · Intelligence Artificielle : Vision</span>
+  <div id="status">connexion…</div>
+</header>
+<main>
+  <section class="card">
+    <h2>Image</h2>
+    <div id="drop">Glisser une photo ici<br>ou cliquer pour choisir</div>
+    <input id="file" type="file" accept="image/*" hidden>
+
+    <label>Source</label>
+    <select id="source">
+      <option value="vehicle">Véhicule (caméra embarquée)</option>
+      <option value="pedestrian">Agent piéton</option>
+      <option value="citizen">Citoyen (filtre photo actif)</option>
+    </select>
+
+    <label>Seuil de confiance : <b id="confv">0.25</b></label>
+    <input id="conf" type="range" min="0.05" max="0.9" step="0.05" value="0.25">
+
+    <div class="check"><input id="depth" type="checkbox"><span>Estimer la profondeur (nids-de-poule)</span></div>
+
+    <label>GPS (optionnel)</label>
+    <div style="display:flex;gap:6px">
+      <input id="lat" type="number" step="any" placeholder="lat">
+      <input id="lon" type="number" step="any" placeholder="lon">
+    </div>
+
+    <button id="run" disabled>Analyser</button>
+    <label id="samplesLabel" hidden>Exemples (jeu de test)</label>
+    <div class="samples" id="samples"></div>
+    <div class="legend" id="legend"></div>
+  </section>
+
+  <section class="card">
+    <h2>Résultat</h2>
+    <div class="stage"><canvas id="cv" hidden></canvas><div class="empty" id="empty">Aucune image chargée</div></div>
+  </section>
+
+  <section class="card">
+    <h2>Détections</h2>
+    <div id="summary"></div>
+    <div id="list"><div class="empty">—</div></div>
+    <details><summary>Événement JSON (contrat v1)</summary><pre id="json"></pre></details>
+  </section>
+</main>
+<script>
+const API = location.origin.startsWith("http") ? "" : "http://127.0.0.1:8002";
+const COLORS = {longitudinal_crack:"#00aaff", transverse_crack:"#ffc800", alligator_crack:"#ff00c8", pothole:"#ff2a2a", manhole:"#a0a0a0"};
+const $ = id => document.getElementById(id);
+let img = null, file = null, lastEvent = null, hover = -1;
+
+fetch(API + "/v1/model").then(r => r.json()).then(m => {
+  $("status").textContent = `modèle ${m.detector} · v${m.version}`;
+  $("legend").innerHTML = Object.values(m.classes).map(c => `<span><i style="background:${COLORS[c.name]}"></i>${c.fr}</span>`).join("");
+}).catch(() => $("status").textContent = "API indisponible");
+
+fetch(API + "/v1/samples").then(r => r.json()).then(list => {
+  if (!list.length) return;
+  $("samplesLabel").hidden = false;
+  $("samples").innerHTML = list.map(n => `<img src="${API}/samples/${n}" title="${n}" alt="${n}">`).join("");
+  $("samples").querySelectorAll("img").forEach(el => el.onclick = async () => {
+    const b = await (await fetch(el.src)).blob();
+    load(new File([b], el.title, {type: "image/jpeg"}));
+  });
+}).catch(() => {});
+
+$("conf").oninput = e => $("confv").textContent = (+e.target.value).toFixed(2);
+$("drop").onclick = () => $("file").click();
+$("file").onchange = e => load(e.target.files[0]);
+["dragover","dragleave","drop"].forEach(ev => $("drop").addEventListener(ev, e => {
+  e.preventDefault(); $("drop").classList.toggle("over", ev === "dragover");
+  if (ev === "drop" && e.dataTransfer.files[0]) load(e.dataTransfer.files[0]);
+}));
+
+function load(f) {
+  if (!f) return;
+  file = f; lastEvent = null;
+  const i = new Image();
+  i.onload = () => { img = i; draw(); $("run").disabled = false; $("drop").textContent = f.name; run(); };
+  i.src = URL.createObjectURL(f);
+}
+
+function draw() {
+  const cv = $("cv"), ctx = cv.getContext("2d");
+  cv.width = img.naturalWidth; cv.height = img.naturalHeight;
+  cv.hidden = false; $("empty").hidden = true;
+  ctx.drawImage(img, 0, 0);
+  if (!lastEvent) return;
+  const lw = Math.max(2, cv.width / 400), fs = Math.max(14, cv.width / 60);
+  lastEvent.detections.forEach((d, i) => {
+    const [x1, y1, x2, y2] = d.bbox_xyxy, col = COLORS[d.class_name] || "#0f0";
+    ctx.lineWidth = i === hover ? lw * 2.5 : lw; ctx.strokeStyle = col;
+    if (!d.is_defect) ctx.setLineDash([lw * 4, lw * 3]);
+    ctx.strokeRect(x1, y1, x2 - x1, y2 - y1); ctx.setLineDash([]);
+    const t = `${d.class_name_fr} ${(d.confidence * 100).toFixed(0)}%` + (d.depth_cm != null ? ` · ${d.depth_cm} cm` : "");
+    ctx.font = `600 ${fs}px system-ui`;
+    const tw = ctx.measureText(t).width + 10, ty = Math.max(fs + 6, y1);
+    ctx.fillStyle = col; ctx.fillRect(x1, ty - fs - 6, tw, fs + 6);
+    ctx.fillStyle = "#000"; ctx.fillText(t, x1 + 5, ty - 5);
+  });
+}
+
+async function run() {
+  if (!file) return;
+  $("run").disabled = true; $("run").textContent = "Analyse…";
+  const fd = new FormData();
+  fd.append("file", file); fd.append("source", $("source").value);
+  fd.append("conf", $("conf").value); fd.append("with_depth", $("depth").checked);
+  if ($("lat").value && $("lon").value) { fd.append("lat", $("lat").value); fd.append("lon", $("lon").value); }
+  try {
+    const r = await fetch(API + "/v1/detect", {method: "POST", body: fd});
+    if (!r.ok) throw new Error(await r.text());
+    lastEvent = await r.json(); render();
+  } catch (e) { $("list").innerHTML = `<div class="banner rej">Erreur : ${e.message}</div>`; }
+  $("run").disabled = false; $("run").textContent = "Analyser";
+}
+$("run").onclick = run;
+
+const REASONS = {blurry: "photo floue", too_dark: "photo trop sombre", not_road: "la photo ne montre pas une route", too_small: "image trop petite"};
+function render() {
+  const ev = lastEvent; draw();
+  $("json").textContent = JSON.stringify(ev, (k, v) => k === "embedding" && v ? `[${v.length} valeurs]` : v, 2);
+  if (!ev.accepted) {
+    $("summary").innerHTML = "";
+    $("list").innerHTML = `<div class="banner rej">Photo rejetée par le filtre : ${REASONS[ev.rejection_reason] || ev.rejection_reason}</div>`;
+    return;
+  }
+  const defects = ev.detections.filter(d => d.is_defect);
+  const ms = Object.values(ev.timing_ms).reduce((a, b) => a + b, 0);
+  $("summary").innerHTML = `<div class="stats">
+    <div class="stat"><b>${defects.length}</b><span>défauts</span></div>
+    <div class="stat"><b>${defects.filter(d => d.severity === "high").length}</b><span>graves</span></div>
+    <div class="stat"><b>${ms.toFixed(0)}</b><span>ms</span></div></div>`;
+  if (!ev.detections.length) { $("list").innerHTML = `<div class="empty">Aucune dégradation détectée.</div>`; return; }
+  const SEV = {low: "faible", medium: "moyenne", high: "élevée"};
+  $("list").innerHTML = ev.detections.map((d, i) => `
+    <div class="det" data-i="${i}">
+      <div class="swatch" style="background:${COLORS[d.class_name]}"></div>
+      <div><div class="t">${d.class_name_fr}</div>
+        <div class="s">confiance ${(d.confidence * 100).toFixed(0)}% · surface ${(d.area_ratio * 100).toFixed(1)}%${d.depth_cm != null ? ` · prof. ${d.depth_cm} cm` : ""}</div></div>
+      ${d.is_defect ? `<span class="pill ${d.severity}">${SEV[d.severity]}</span>` : `<span class="pill info">non-défaut</span>`}
+    </div>`).join("");
+  document.querySelectorAll(".det").forEach(el => {
+    el.onmouseenter = () => { hover = +el.dataset.i; draw(); };
+    el.onmouseleave = () => { hover = -1; draw(); };
+  });
+}
+</script>
+</body>
+</html>

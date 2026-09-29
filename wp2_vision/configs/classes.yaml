@@ -1,0 +1,12 @@
+# Unified WP2 taxonomy. Class ids are part of the model contract: do not reorder.
+# fr = label used in the contract (Article 3), is_defect=false means "detect but never report as damage".
+classes:
+  0: {name: longitudinal_crack, fr: "fissure longitudinale", is_defect: true,  rdd: D00}
+  1: {name: transverse_crack,   fr: "fissure transversale",  is_defect: true,  rdd: D10}
+  2: {name: alligator_crack,    fr: "faïençage",             is_defect: true,  rdd: D20}
+  3: {name: pothole,            fr: "nid-de-poule",          is_defect: true,  rdd: D40}
+  4: {name: manhole,            fr: "plaque d'égout",        is_defect: false, rdd: null}
+
+# Contract defect types with no public training data yet (to be added from WP1 local data):
+# affaissement, plaque d'égout défectueuse, dalle cassée/descellée, ressaut,
+# soulèvement par racine, bordure cassée.

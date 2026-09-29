@@ -1,0 +1,36 @@
+/* Design tokens — toute couleur / espacement de l'interface passe par ces variables. */
+:root {
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --navy-900: #0f1d36;
+  --navy-800: #15294b;
+  --navy-700: #1d3761;
+  --navy-600: #2a4a7f;
+  --blue-500: #2f6fde;
+  --blue-100: #e6efff;
+  --gold-400: #f2b134;
+
+  --bg: #f3f5f9;
+  --surface: #ffffff;
+  --surface-2: #f8f9fc;
+  --line: #e3e7ef;
+  --line-strong: #cfd6e3;
+  --ink: #16202f;
+  --ink-2: #4a5568;
+  --ink-3: #7b8597;
+
+  --sev-critique: #c62f3c;
+  --sev-elevee: #e0712c;
+  --sev-moyenne: #d9a520;
+  --sev-faible: #3f8f6b;
+  --uncovered: #8a93a3;
+  --ok: #3f8f6b;
+
+  --radius-s: 6px;
+  --radius: 10px;
+  --radius-l: 14px;
+  --shadow-1: 0 1px 2px rgba(16, 29, 54, 0.06), 0 1px 3px rgba(16, 29, 54, 0.05);
+  --shadow-2: 0 8px 28px rgba(16, 29, 54, 0.14);
+  --sidebar-w: 248px;
+  --topbar-h: 60px;
+}

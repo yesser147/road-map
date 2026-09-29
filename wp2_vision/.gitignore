@@ -1,0 +1,8 @@
+.venv/
+data/raw/
+data/processed/
+runs/
+runs_train*.log
+__pycache__/
+*.pyc
+demo/*.mp4

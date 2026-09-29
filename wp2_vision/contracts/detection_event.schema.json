@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "roadmap/wp2/detection_event/v1",
+  "title": "WP2 DetectionEvent v1",
+  "description": "Output of the WP2 vision pipeline for one image. Consumed by WP4 (storage, map) and WP3 (priority score, cost).",
+  "type": "object",
+  "required": ["schema_version", "image_id", "model", "image", "accepted", "detections"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "image_id": {"type": "string", "description": "Id given by the caller (WP1 capture app or WP4); echoed back."},
+    "source": {"enum": ["vehicle", "pedestrian", "citizen", "unknown"], "default": "unknown"},
+    "captured_at": {"type": ["string", "null"], "format": "date-time"},
+    "gps": {
+      "type": ["object", "null"],
+      "required": ["lat", "lon"],
+      "properties": {
+        "lat": {"type": "number", "minimum": -90, "maximum": 90},
+        "lon": {"type": "number", "minimum": -180, "maximum": 180},
+        "accuracy_m": {"type": ["number", "null"]},
+        "heading_deg": {"type": ["number", "null"]}
+      }
+    },
+    "model": {
+      "type": "object",
+      "required": ["detector", "version"],
+      "properties": {
+        "detector": {"type": "string"},
+        "version": {"type": "string"},
+        "depth_model": {"type": ["string", "null"]}
+      }
+    },
+    "image": {
+      "type": "object",
+      "required": ["width", "height"],
+      "properties": {"width": {"type": "integer"}, "height": {"type": "integer"}}
+    },
+    "accepted": {"type": "boolean", "description": "false when the photo filter rejected the image (citizen photos). detections is then empty."},
+    "rejection_reason": {"type": ["string", "null"], "enum": [null, "blurry", "too_dark", "not_road", "too_small"]},
+    "quality": {
+      "type": "object",
+      "properties": {
+        "blur_score": {"type": "number"},
+        "brightness": {"type": "number"},
+        "road_score": {"type": ["number", "null"]}
+      }
+    },
+    "detections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["class_id", "class_name", "is_defect", "confidence", "bbox_xyxy", "bbox_norm", "severity"],
+        "properties": {
+          "class_id": {"type": "integer"},
+          "class_name": {"type": "string"},
+          "class_name_fr": {"type": "string"},
+          "is_defect": {"type": "boolean", "description": "false for manholes and other non-damage objects: WP4 must not create a defect for them."},
+          "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+          "bbox_xyxy": {"type": "array", "items": {"type": "number"}, "minItems": 4, "maxItems": 4, "description": "Pixels in the original image."},
+          "bbox_norm": {"type": "array", "items": {"type": "number"}, "minItems": 4, "maxItems": 4, "description": "xyxy divided by width/height, 0..1."},
+          "area_ratio": {"type": "number", "description": "Box area / image area."},
+          "depth_cm": {"type": ["number", "null"], "description": "Estimated max depth (potholes only). Null when not computed."},
+          "depth_method": {"type": ["string", "null"]},
+          "length_m": {"type": ["number", "null"], "description": "Estimated length (m, along the road) from the depth map. Null when depth was not computed."},
+          "width_m": {"type": ["number", "null"], "description": "Estimated width (m) from the depth map. Null when depth was not computed."},
+          "severity": {"enum": ["low", "medium", "high"]},
+          "severity_score": {"type": "number", "minimum": 0, "maximum": 1},
+          "embedding": {"type": ["array", "null"], "items": {"type": "number"}, "description": "Optional appearance vector of the crop, used for duplicate merging."}
+        }
+      }
+    },
+    "timing_ms": {"type": "object", "additionalProperties": {"type": "number"}}
+  }
+}

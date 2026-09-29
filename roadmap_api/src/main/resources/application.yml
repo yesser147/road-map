@@ -1,0 +1,63 @@
+# Road Map — API REST (WP4)
+# Profil par défaut : H2 fichier (démo, aucune installation). Profil "postgres" : PostgreSQL/PostGIS.
+server:
+  port: 8080
+  tomcat:
+    # Lit entièrement une photo trop lourde avant de répondre 413 : sinon Tomcat coupe la connexion
+    # et le navigateur du téléphone ne voit qu'une erreur réseau au lieu du message.
+    max-swallow-size: 40MB
+
+spring:
+  application:
+    name: roadmap-api
+  datasource:
+    url: jdbc:h2:file:./data/roadmap;AUTO_SERVER=TRUE
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 22MB
+
+roadmap:
+  # Clé HMAC des jetons JWT (>= 32 caractères). À surcharger en production : ROADMAP_JWT_SECRET.
+  jwt-secret: ${ROADMAP_JWT_SECRET:dev-only-secret-change-me-0123456789abcdef}
+  jwt-validity-hours: 12
+  uploads-dir: ./data/uploads
+  # Service vision WP2 (wp2_vision, FastAPI). Vide = désactivé.
+  vision-url: ${ROADMAP_VISION_URL:http://127.0.0.1:8002}
+  # Géocodage inverse (adresse d'une position hors des voies connues). Vide = désactivé.
+  geocoding-url: ${ROADMAP_GEOCODING_URL:https://nominatim.openstreetmap.org}
+  # Charge seed/seed.json au premier démarrage (données simulées de la zone pilote).
+  seed-demo-data: true
+  # Mot de passe des comptes de démonstration (voir README). À désactiver en production.
+  demo-password: ${ROADMAP_DEMO_PASSWORD:Demo2026!}
+  # Origines autorisées (motifs). Dev : Vite en local et depuis un téléphone du réseau local.
+  cors-origins: ${ROADMAP_CORS_ORIGINS:http://localhost:*,https://localhost:*,http://127.0.0.1:*,http://192.168.*:*,https://192.168.*:*}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+---
+spring:
+  config:
+    activate:
+      on-profile: postgres
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/roadmap}
+    username: ${DB_USER:roadmap}
+    password: ${DB_PASSWORD:roadmap}
+  h2:
+    console:
+      enabled: false

@@ -1,0 +1,17 @@
+# torch / torchvision: install first from https://download.pytorch.org/whl/cu124 (GPU) or PyPI (CPU)
+ultralytics>=8.3
+opencv-python
+transformers
+huggingface_hub
+fastapi
+uvicorn
+python-multipart
+pydantic>=2
+pyyaml
+numpy
+tqdm
+onnx
+onnxruntime
+onnxslim
+jsonschema
+pytest
