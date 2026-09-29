@@ -19,7 +19,6 @@ wp2_vision/demo/*.mp4
 # ---- configuration locale ----
 .env
 .env.local
-.claude/
 .github/modernize/
 .idea/
 .vscode/
