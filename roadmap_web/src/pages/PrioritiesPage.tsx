@@ -10,7 +10,7 @@ import { useApi } from "@/state/useApi";
 import type { Defect, DefectType, Severity } from "@/types/domain";
 
 type SortKey = "score" | "cost" | "age";
-const FACTOR_COLORS = ["#1d3761", "#2f6fde", "#8fb3f5", "#b7c3d9", "#f2b134"];
+const FACTOR_COLORS = ["#d2352c", "#1b5fa8", "#5b62d6", "#1b9a8e", "#e0a21b"];
 
 function exportCsv(rows: Defect[]) {
   const head = ["rang", "id", "type", "gravite", "statut", "voie", "arrondissement", "score", "cout_dt", "ligne_bareme", "premiere_detection"];

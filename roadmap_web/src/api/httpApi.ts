@@ -81,6 +81,18 @@ export const httpApi: RoadMapApi = {
   },
   myReports: () => http("/citizen/reports"),
 
+  getCaptures: async () => {
+    try {
+      return await http("/captures");
+    } catch (e) {
+      // Service de traitement vidéo (WP1) pas encore branché : données de démonstration, signalées comme telles.
+      if (e instanceof ApiError && (e.status === 404 || e.status === 403)) {
+        const { captures } = await import("@/mocks/captures");
+        return captures;
+      }
+      throw e;
+    }
+  },
   getTimeline: () => http("/timeline"),
   ask: (question) => http("/assistant", post({ question })),
 };

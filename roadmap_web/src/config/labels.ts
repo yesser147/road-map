@@ -56,20 +56,23 @@ export const ROLE_LABEL: Record<Role, string> = {
 
 /** Couleurs métier : lues par la carte, les badges et les graphiques. Miroir de tokens.css. */
 export const SEVERITY_COLOR: Record<Severity, string> = {
-  critique: "#c62f3c",
-  elevee: "#e0712c",
-  moyenne: "#d9a520",
-  faible: "#3f8f6b",
+  critique: "#d2352c",
+  elevee: "#e8772e",
+  moyenne: "#e0a21b",
+  faible: "#2e9e6b",
 };
 
 export const CONDITION_COLOR: Record<SegmentCondition, string> = {
-  bon: "#3f8f6b",
-  degrade: "#e0912c",
-  critique: "#c62f3c",
-  non_couvert: "#8a93a3",
+  bon: "#2e9e6b",
+  degrade: "#e8952e",
+  critique: "#d2352c",
+  non_couvert: "#9aa3ae",
 };
 
-export const ASSET_COLOR = "#5b6b86";
+export const ASSET_COLOR = "#6b6f76";
+
+/** Couleur de marque (miroir de --brand dans tokens.css) — pour les tracés dessinés sur canvas. */
+export const BRAND_COLOR = "#1b5fa8";
 
 export function fmtTnd(v: number): string {
   return new Intl.NumberFormat("fr-TN", { maximumFractionDigits: 0 }).format(v) + " DT";

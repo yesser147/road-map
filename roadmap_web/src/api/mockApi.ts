@@ -195,6 +195,10 @@ export const mockApi: RoadMapApi = {
       }));
     return wait(mine);
   },
+  getCaptures: async () => {
+    const { captures } = await import("@/mocks/captures");
+    return wait(captures);
+  },
   getTimeline: () => wait(db.timeline),
   ask: (question) => wait(answer(question), 700),
 };

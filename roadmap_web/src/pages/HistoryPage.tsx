@@ -33,13 +33,13 @@ export default function HistoryPage() {
           <div className="card-b" style={{ height: 260 }}>
             <ResponsiveContainer>
               <AreaChart data={tl}>
-                <defs><linearGradient id="bk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#2a4a7f" stopOpacity={0.35} /><stop offset="1" stopColor="#2a4a7f" stopOpacity={0.02} /></linearGradient></defs>
-                <CartesianGrid vertical={false} stroke="#edf0f5" />
+                <defs><linearGradient id="bk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#1b5fa8" stopOpacity={0.35} /><stop offset="1" stopColor="#1b5fa8" stopOpacity={0.02} /></linearGradient></defs>
+                <CartesianGrid vertical={false} stroke="#ecebe6" />
                 <XAxis dataKey="label" tickLine={false} axisLine={false} fontSize={12} />
                 <YAxis tickFormatter={(v) => `${Math.round(v / 1000)} k`} tickLine={false} axisLine={false} fontSize={12} width={44} />
                 <Tooltip formatter={(v) => fmtTnd(Number(v))} />
-                <ReferenceLine x={tl[6]?.label} stroke="#f2b134" strokeDasharray="4 4" label={{ value: "début collecte auto.", fontSize: 11, fill: "#8a6300", position: "insideTopLeft" }} />
-                <Area type="monotone" dataKey="backlogCostTnd" name="Reste à faire" stroke="#2a4a7f" strokeWidth={2} fill="url(#bk)" />
+                <ReferenceLine x={tl[6]?.label} stroke="#9a9a93" strokeDasharray="4 4" label={{ value: "début collecte auto.", fontSize: 11, fill: "#6b6f76", position: "insideTopLeft" }} />
+                <Area type="monotone" dataKey="backlogCostTnd" name="Reste à faire" stroke="#1b5fa8" strokeWidth={2} fill="url(#bk)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -49,12 +49,12 @@ export default function HistoryPage() {
           <div className="card-b" style={{ height: 260 }}>
             <ResponsiveContainer>
               <LineChart data={tl}>
-                <CartesianGrid vertical={false} stroke="#edf0f5" />
+                <CartesianGrid vertical={false} stroke="#ecebe6" />
                 <XAxis dataKey="label" tickLine={false} axisLine={false} fontSize={12} />
                 <YAxis tickLine={false} axisLine={false} fontSize={12} width={34} />
                 <Tooltip />
-                <Line type="monotone" dataKey="cumDetected" name="Détectés" stroke="#e0712c" strokeWidth={2.5} dot={false} />
-                <Line type="monotone" dataKey="cumRepaired" name="Réparés" stroke="#2a4a7f" strokeWidth={2.5} dot={false} />
+                <Line type="monotone" dataKey="cumDetected" name="Détectés" stroke="#d2612e" strokeWidth={2.5} dot={false} />
+                <Line type="monotone" dataKey="cumRepaired" name="Réparés" stroke="#1b5fa8" strokeWidth={2.5} dot={false} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -84,13 +84,13 @@ export default function HistoryPage() {
                 </div>
                 <ResponsiveContainer height="88%">
                   <LineChart data={depthSeries}>
-                    <CartesianGrid vertical={false} stroke="#edf0f5" />
+                    <CartesianGrid vertical={false} stroke="#ecebe6" />
                     <XAxis dataKey="date" tickLine={false} axisLine={false} fontSize={12} />
                     <YAxis unit=" cm" tickLine={false} axisLine={false} fontSize={12} width={48} />
                     <Tooltip formatter={(v) => `${v} cm`} />
-                    <ReferenceLine y={6} stroke="#e0712c" strokeDasharray="4 4" label={{ value: "seuil gravité élevée", fontSize: 11, fill: "#b8561b", position: "insideTopRight" }} />
-                    <ReferenceLine y={10} stroke="#c62f3c" strokeDasharray="4 4" label={{ value: "seuil critique", fontSize: 11, fill: "#c62f3c", position: "insideTopRight" }} />
-                    <Line type="monotone" dataKey="depth" name="Profondeur" stroke="#2a4a7f" strokeWidth={2.5} dot={{ r: 4 }} />
+                    <ReferenceLine y={6} stroke="#d2612e" strokeDasharray="4 4" label={{ value: "seuil gravité élevée", fontSize: 11, fill: "#b8541a", position: "insideTopRight" }} />
+                    <ReferenceLine y={10} stroke="#d2352c" strokeDasharray="4 4" label={{ value: "seuil critique", fontSize: 11, fill: "#d2352c", position: "insideTopRight" }} />
+                    <Line type="monotone" dataKey="depth" name="Profondeur" stroke="#1b5fa8" strokeWidth={2.5} dot={{ r: 4 }} />
                   </LineChart>
                 </ResponsiveContainer>
               </>

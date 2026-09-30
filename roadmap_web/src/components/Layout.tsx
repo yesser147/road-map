@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useLocation } from "react-router-dom";
-import { Bot, ClipboardList, Info, LayoutDashboard, LineChart, ListOrdered, LogOut, Map, MessagesSquare, Wifi, WifiOff } from "lucide-react";
+import { Bot, Bus, ClipboardList, Info, LayoutDashboard, LineChart, ListOrdered, LogOut, Map, MessagesSquare, Wifi, WifiOff } from "lucide-react";
 import { API_MODE, api } from "@/api";
 import { ROLE_LABEL } from "@/config/labels";
 import { useSession } from "@/state/session";
@@ -14,6 +14,7 @@ export const ROUTES = [
   { path: "/pro", label: "Tableau de bord", icon: LayoutDashboard, section: "Pilotage" },
   { path: "/pro/carte", label: "Carte du réseau", icon: Map, section: "Pilotage" },
   { path: "/pro/priorites", label: "Priorités", icon: ListOrdered, section: "Pilotage" },
+  { path: "/pro/collecte", label: "Collecte véhicules", icon: Bus, section: "Opérations" },
   { path: "/pro/reparations", label: "Réparations", icon: ClipboardList, section: "Opérations" },
   { path: "/pro/signalements", label: "Signalements citoyens", icon: MessagesSquare, section: "Opérations" },
   { path: "/pro/suivi", label: "Suivi dans le temps", icon: LineChart, section: "Analyse" },
@@ -28,7 +29,7 @@ function Sidebar() {
     <nav className="sidebar">
       <div className="brand">
         <div className="brand-mark">
-          <svg width="20" height="20" viewBox="0 0 32 32"><path d="M9 26 14 6h4l5 20" fill="none" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" /><path d="M16 10v3M16 17v3" stroke="#f2b134" strokeWidth="2.6" strokeLinecap="round" /></svg>
+          <svg width="20" height="20" viewBox="0 0 32 32"><path d="M9 26 14 6h4l5 20" fill="none" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" /><path d="M16 10v3M16 17v3" stroke="#9fd1d8" strokeWidth="2.6" strokeLinecap="round" /></svg>
         </div>
         <div className="brand-text">
           <div className="brand-name">Road Map</div>
@@ -58,7 +59,7 @@ function Sidebar() {
 
 const SHORT: Record<string, string> = {
   "/pro": "Accueil", "/pro/carte": "Carte", "/pro/priorites": "Priorités", "/pro/reparations": "Travaux",
-  "/pro/signalements": "Signalem.", "/pro/suivi": "Suivi", "/pro/assistant": "Assistant",
+  "/pro/signalements": "Signalem.", "/pro/collecte": "Collecte", "/pro/suivi": "Suivi", "/pro/assistant": "Assistant",
 };
 
 function MobileNav() {

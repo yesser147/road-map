@@ -15,6 +15,7 @@ const PrioritiesPage = lazy(() => import("@/pages/PrioritiesPage"));
 const RepairsPage = lazy(() => import("@/pages/RepairsPage"));
 const ReportsPage = lazy(() => import("@/pages/ReportsPage"));
 const HistoryPage = lazy(() => import("@/pages/HistoryPage"));
+const CapturesPage = lazy(() => import("@/pages/CapturesPage"));
 const AssistantPage = lazy(() => import("@/pages/AssistantPage"));
 // espace citoyen + accueil
 const WelcomePage = lazy(() => import("@/pages/WelcomePage"));
@@ -46,6 +47,7 @@ createRoot(document.getElementById("root")!).render(
             <Route index element={page(<DashboardPage />)} />
             <Route path="carte" element={page(<MapPage />)} />
             <Route path="priorites" element={page(<PrioritiesPage />)} />
+            <Route path="collecte" element={page(<CapturesPage />)} />
             <Route path="reparations" element={page(<RepairsPage />)} />
             <Route path="signalements" element={page(<ReportsPage />)} />
             <Route path="suivi" element={page(<HistoryPage />)} />

@@ -1,5 +1,6 @@
 import type {
   Asset,
+  CaptureOverview,
   AssistantAnswer,
   AuthSession,
   CitizenReport,
@@ -65,6 +66,9 @@ export interface RoadMapApi {
   // signalements citoyens — côté citoyen
   submitReport(input: NewReportInput): Promise<CitizenReport>;
   myReports(): Promise<MyReport[]>;
+
+  // collecte par véhicules (bus, bennes) — produite par le service de traitement vidéo (WP1)
+  getCaptures(): Promise<CaptureOverview>;
 
   // suivi temporel (F8)
   getTimeline(): Promise<TimePoint[]>;

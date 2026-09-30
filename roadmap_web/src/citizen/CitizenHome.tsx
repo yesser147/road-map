@@ -15,8 +15,8 @@ export default function CitizenHome() {
   return (
     <div className="cz-page stack" style={{ gap: 16 }}>
       <div>
-        <div className="muted small">Bonjour</div>
-        <h2 className="cz-h2">{user?.name.split(" ")[0]} 👋</h2>
+        <h2 className="cz-h2">Bonjour {user?.name.split(" ")[0]}</h2>
+        <div className="muted small">Merci de contribuer à l'entretien des routes de votre quartier.</div>
       </div>
 
       <Link to="/citoyen/signaler" className="cz-hero">
@@ -52,8 +52,8 @@ export default function CitizenHome() {
         </div>
       )}
 
-      <div className="card" style={{ padding: 14, background: "#fffaf0", borderColor: "#f1dfae" }}>
-        <div className="row" style={{ gap: 8, fontWeight: 600 }}><Lightbulb size={17} color="#b58100" /> Une bonne photo</div>
+      <div className="card" style={{ padding: 14 }}>
+        <div className="row" style={{ gap: 8, fontWeight: 600 }}><Lightbulb size={16} color="var(--ink-3)" /> Une bonne photo</div>
         <ul className="small" style={{ margin: "8px 0 0", paddingLeft: 18, color: "var(--ink-2)" }}>
           <li>Cadrez le défaut entier, à 1–2 mètres.</li>
           <li>Restez en sécurité : ne vous arrêtez jamais sur la chaussée.</li>

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { AlertOctagon, Banknote, CheckCircle2, Gauge, MessagesSquare, Route, Timer, TriangleAlert } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Area, AreaChart, Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { api } from "@/api";
 import { SeverityBadge, StatusBadge } from "@/components/Badges";
 import { useDefectDrawer } from "@/components/DefectDrawer";
@@ -47,16 +47,16 @@ export default function DashboardPage() {
 
   return (
     <div className="grid" style={{ gap: 18 }}>
-      <div className="grid" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
-        <KpiCard label="Défauts à traiter" icon={<TriangleAlert size={14} />} value={kpis?.activeDefects ?? "—"}
-          hint={<><b style={{ color: "var(--sev-critique)" }}>{kpis?.criticalDefects ?? "—"}</b> critiques</>} accent="var(--sev-elevee)" />
-        <KpiCard label="Coût du reste à faire" icon={<Banknote size={14} />} value={kpis ? fmtTnd(kpis.backlogCostTnd) : "—"} hint="estimation sourcée (barème provisoire)" accent="var(--navy-600)" />
-        <KpiCard label="Indice d'état du réseau" icon={<Gauge size={14} />} value={kpis ? `${kpis.conditionIndex}/100` : "—"}
-          hint={last && prev && <span className={last.conditionIndex >= prev.conditionIndex ? "trend-up" : "trend-down"}>{last.conditionIndex >= prev.conditionIndex ? "▲" : "▼"} {Math.abs(last.conditionIndex - prev.conditionIndex).toFixed(1)} pt ce mois</span>} accent="var(--ok)" />
-        <KpiCard label="Couverture du réseau" icon={<Route size={14} />} value={kpis ? `${Math.round((100 * kpis.coveredKm) / kpis.networkKm)} %` : "—"}
-          hint={kpis && `${kpis.coveredKm} / ${kpis.networkKm} km parcourus < 30 j`} accent="var(--uncovered)" />
-        <KpiCard label="Réparés (30 j)" icon={<CheckCircle2 size={14} />} value={kpis?.repairedLast30d ?? "—"} hint={<><Timer size={11} /> délai moyen {kpis?.meanRepairDays ?? "—"} j</>} accent="var(--ok)" />
-        <KpiCard label="Signalements à valider" icon={<MessagesSquare size={14} />} value={kpis?.pendingReports ?? "—"} hint={<Link to="/pro/signalements">Ouvrir la file →</Link>} accent="var(--gold-400)" />
+      <div className="grid" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(165px, 1fr))" }}>
+        <KpiCard label="Défauts à traiter" icon={<TriangleAlert size={17} />} value={kpis?.activeDefects ?? "—"}
+          hint={<><b style={{ color: "var(--sev-critique)" }}>{kpis?.criticalDefects ?? "—"}</b> critiques</>} accent="var(--accent)" />
+        <KpiCard label="Coût du reste à faire" icon={<Banknote size={17} />} value={kpis ? fmtTnd(kpis.backlogCostTnd) : "—"} hint="estimation sourcée (barème provisoire)" accent="var(--brand)" />
+        <KpiCard label="Indice d'état du réseau" icon={<Gauge size={17} />} value={kpis ? `${kpis.conditionIndex}/100` : "—"}
+          hint={last && prev && <span className={last.conditionIndex >= prev.conditionIndex ? "trend-up" : "trend-down"}>{last.conditionIndex >= prev.conditionIndex ? "▲" : "▼"} {Math.abs(last.conditionIndex - prev.conditionIndex).toFixed(1)} pt ce mois</span>} accent="var(--teal)" />
+        <KpiCard label="Couverture du réseau" icon={<Route size={17} />} value={kpis ? `${Math.round((100 * kpis.coveredKm) / kpis.networkKm)} %` : "—"}
+          hint={kpis && `${kpis.coveredKm} / ${kpis.networkKm} km parcourus < 30 j`} accent="var(--indigo)" />
+        <KpiCard label="Réparés (30 j)" icon={<CheckCircle2 size={17} />} value={kpis?.repairedLast30d ?? "—"} hint={<><Timer size={11} /> délai moyen {kpis?.meanRepairDays ?? "—"} j</>} accent="var(--ok)" />
+        <KpiCard label="Signalements à valider" icon={<MessagesSquare size={17} />} value={kpis?.pendingReports ?? "—"} hint={<Link to="/pro/signalements">Ouvrir la file →</Link>} accent="var(--amber)" />
       </div>
 
       <div className="grid resp" style={{ gridTemplateColumns: "minmax(0, 1.6fr) minmax(0, 1fr)" }}>
@@ -65,13 +65,13 @@ export default function DashboardPage() {
           <div className="card-b" style={{ height: 270 }}>
             <ResponsiveContainer>
               <BarChart data={tl} barGap={2}>
-                <CartesianGrid vertical={false} stroke="#edf0f5" />
+                <CartesianGrid vertical={false} stroke="#ecebe6" />
                 <XAxis dataKey="label" tickLine={false} axisLine={false} fontSize={12} />
                 <YAxis tickLine={false} axisLine={false} fontSize={12} width={30} />
-                <Tooltip cursor={{ fill: "#f3f5f9" }} />
+                <Tooltip cursor={{ fill: "#f4f4f1" }} />
                 <Legend iconType="circle" wrapperStyle={{ fontSize: 12 }} />
-                <Bar dataKey="detected" name="Détectés" fill="#e0712c" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="repaired" name="Réparés" fill="#2a4a7f" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="detected" name="Détectés" fill="#d2612e" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="repaired" name="Réparés" fill="#1b5fa8" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -80,13 +80,19 @@ export default function DashboardPage() {
           <div className="card-h"><h3>Indice d'état du réseau</h3></div>
           <div className="card-b" style={{ height: 270 }}>
             <ResponsiveContainer>
-              <LineChart data={tl}>
-                <CartesianGrid vertical={false} stroke="#edf0f5" />
+              <AreaChart data={tl}>
+                <defs>
+                  <linearGradient id="ci" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stopColor="#1b9a8e" stopOpacity={0.28} />
+                    <stop offset="1" stopColor="#1b9a8e" stopOpacity={0.02} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid vertical={false} stroke="#ecebe6" />
                 <XAxis dataKey="label" tickLine={false} axisLine={false} fontSize={12} />
                 <YAxis domain={[40, 100]} tickLine={false} axisLine={false} fontSize={12} width={30} />
                 <Tooltip />
-                <Line type="monotone" dataKey="conditionIndex" name="Indice /100" stroke="#3f8f6b" strokeWidth={2.5} dot={false} />
-              </LineChart>
+                <Area type="monotone" dataKey="conditionIndex" name="Indice /100" stroke="#1b9a8e" strokeWidth={2.5} fill="url(#ci)" />
+              </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
@@ -119,7 +125,7 @@ export default function DashboardPage() {
               <BarChart data={byType} layout="vertical" margin={{ left: 10 }}>
                 <XAxis type="number" hide />
                 <YAxis type="category" dataKey="type" width={150} tickLine={false} axisLine={false} fontSize={12} />
-                <Tooltip cursor={{ fill: "#f3f5f9" }} />
+                <Tooltip cursor={{ fill: "#f4f4f1" }} />
                 {SEVERITY_ORDER.map((s, i) => (
                   <Bar key={s} dataKey={s} stackId="a" name={s} fill={SEVERITY_COLOR[s]} radius={i === SEVERITY_ORDER.length - 1 ? [0, 4, 4, 0] : 0} />
                 ))}

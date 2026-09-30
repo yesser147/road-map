@@ -24,7 +24,7 @@ import type {
   TimePoint,
 } from "@/types/domain";
 
-interface Way {
+export interface Way {
   id: string;
   name: string | null;
   class: string;
@@ -80,7 +80,7 @@ export function districtOf(lat: number, lng: number): string {
 export const DISTRICTS = ["Centre-ville", "Bizerte Nord", "Bizerte Ouest", "Bizerte Sud", "Zarzouna"];
 
 // ---------------------------------------------------------------- segmentation des voies
-const ways = (roadsFile as unknown as { ways: Way[] }).ways;
+export const ways = (roadsFile as unknown as { ways: Way[] }).ways;
 const SEGMENT_M = 140;
 
 function splitWay(w: Way): [number, number][][] {

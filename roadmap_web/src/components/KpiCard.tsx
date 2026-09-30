@@ -1,18 +1,19 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 interface Props {
   label: string;
   value: ReactNode;
   hint?: ReactNode;
   icon?: ReactNode;
+  /** Couleur de la catégorie (variable CSS) : teinte la pastille d'icône. */
   accent?: string;
 }
 
 export function KpiCard({ label, value, hint, icon, accent }: Props) {
   return (
-    <div className="card kpi" style={accent ? { borderTop: `3px solid ${accent}` } : undefined}>
+    <div className="card kpi" style={accent ? ({ "--kpi": accent } as CSSProperties) : undefined}>
       <div className="label">
-        {icon}
+        {icon && <span className="kpi-icon">{icon}</span>}
         {label}
       </div>
       <div className="value num">{value}</div>

@@ -21,6 +21,32 @@ const DEMO_CITIZEN = "citoyen@demo.tn";
 function AuthShell({ tone, icon, title, subtitle, children }: { tone: "staff" | "citizen"; icon: ReactNode; title: string; subtitle: string; children: ReactNode }) {
   return (
     <div className={`auth-page ${tone}`}>
+      <aside className="auth-side road-pattern">
+        <div className="row" style={{ gap: 10 }}>
+          <BrandMark size={34} />
+          <div style={{ fontWeight: 600, fontSize: 16 }}>Road Map</div>
+        </div>
+        {tone === "staff" ? (
+          <div>
+            <h2>L'état du réseau, rue par rue.</h2>
+            <ul>
+              <li>Carte des dégradations mise à jour chaque jour par les bus équipés</li>
+              <li>Priorités chiffrées et expliquées pour planifier les équipes</li>
+              <li>Accès limité au périmètre de chaque service</li>
+            </ul>
+          </div>
+        ) : (
+          <div>
+            <h2>Un trou dans votre rue ? Une photo suffit.</h2>
+            <ul>
+              <li>Photo et position envoyées en quelques secondes</li>
+              <li>Vérification automatique, puis par les services</li>
+              <li>Vous suivez votre signalement jusqu'à la réparation</li>
+            </ul>
+          </div>
+        )}
+        <div className="small auth-side-foot">Ministère de l'Équipement — zone pilote : Bizerte</div>
+      </aside>
       <div className="auth-card">
         <Link to="/" className="auth-back"><ArrowLeft size={16} /> Accueil</Link>
         <div className="row" style={{ gap: 12, marginBottom: 18 }}>

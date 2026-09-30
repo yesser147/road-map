@@ -1,36 +1,62 @@
-/* Design tokens — toute couleur / espacement de l'interface passe par ces variables. */
+/*
+ * Design tokens — identité « Méditerranée » : bleu profond (portes de Sidi Bou Saïd) + terracotta (tuiles),
+ * sur un fond sable clair. Toute couleur de l'interface passe par ces variables.
+ */
 :root {
-  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "Cascadia Code", Consolas, monospace;
 
-  --navy-900: #0f1d36;
-  --navy-800: #15294b;
-  --navy-700: #1d3761;
-  --navy-600: #2a4a7f;
-  --blue-500: #2f6fde;
-  --blue-100: #e6efff;
-  --gold-400: #f2b134;
+  /* marque */
+  --brand-900: #0f2748;
+  --brand-800: #143461;
+  --brand-700: #174a86;
+  --brand: #1b5fa8;
+  --brand-600: #2470c2;
+  --brand-100: #d6e5f7;
+  --brand-50: #edf4fc;
 
-  --bg: #f3f5f9;
+  /* accent chaud : actions citoyennes, élément actif, chiffres clés */
+  --accent: #d2612e;
+  --accent-600: #b9501f;
+  --accent-50: #fcefe7;
+
+  /* couleurs secondaires (catégories d'indicateurs, graphiques) */
+  --indigo: #5b62d6;
+  --teal: #1b9a8e;
+  --amber: #e0a21b;
+
+  /* neutres sable */
+  --bg: #f5f3ee;
   --surface: #ffffff;
-  --surface-2: #f8f9fc;
-  --line: #e3e7ef;
-  --line-strong: #cfd6e3;
-  --ink: #16202f;
-  --ink-2: #4a5568;
-  --ink-3: #7b8597;
+  --surface-2: #faf9f6;
+  --line: #e4e1d8;
+  --line-strong: #cdc9bd;
+  --ink: #17202b;
+  --ink-2: #47505c;
+  --ink-3: #7a828d;
 
-  --sev-critique: #c62f3c;
-  --sev-elevee: #e0712c;
-  --sev-moyenne: #d9a520;
-  --sev-faible: #3f8f6b;
-  --uncovered: #8a93a3;
-  --ok: #3f8f6b;
+  /* gravité */
+  --sev-critique: #d2352c;
+  --sev-elevee: #e8772e;
+  --sev-moyenne: #e0a21b;
+  --sev-faible: #2e9e6b;
+  --uncovered: #9aa3ae;
+  --ok: #2e9e6b;
 
-  --radius-s: 6px;
-  --radius: 10px;
-  --radius-l: 14px;
-  --shadow-1: 0 1px 2px rgba(16, 29, 54, 0.06), 0 1px 3px rgba(16, 29, 54, 0.05);
-  --shadow-2: 0 8px 28px rgba(16, 29, 54, 0.14);
-  --sidebar-w: 248px;
+  /* alias historiques (styles en ligne) */
+  --navy-900: var(--brand-900);
+  --navy-800: var(--brand-800);
+  --navy-700: var(--brand);
+  --navy-600: var(--brand-600);
+  --blue-500: var(--brand);
+  --blue-100: var(--brand-50);
+  --gold-400: var(--accent);
+
+  --radius-s: 5px;
+  --radius: 8px;
+  --radius-l: 12px;
+  --shadow-1: 0 1px 2px rgba(15, 39, 72, 0.06);
+  --shadow-2: 0 10px 30px rgba(15, 39, 72, 0.16);
+  --sidebar-w: 240px;
   --topbar-h: 60px;
 }

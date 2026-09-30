@@ -203,3 +203,64 @@ export interface DefectFilters {
   district?: string;
   search?: string;
 }
+
+// ---------------------------------------------------------------- collecte par véhicules (WP1)
+
+/** Véhicule public équipé d'une caméra embarquée (bus, benne de collecte des ordures). */
+export interface CaptureVehicle {
+  id: string; // ex. BUS-12
+  kind: "bus" | "benne";
+  label: string; // ex. « Ligne 1 — Centre-ville ↔ Zarzouna »
+  plateMasked: string;
+  camera: string;
+  lastSync: string; // ISO
+}
+
+export type PipelineStepKey = "reception" | "anonymisation" | "extraction" | "detection" | "regroupement" | "publication";
+
+export interface PipelineStep {
+  key: PipelineStepKey;
+  label: string;
+  status: "termine" | "en_cours" | "en_attente";
+  durationSec?: number;
+  detail?: string;
+}
+
+/** Image extraite d'une vidéo, sur laquelle le modèle a détecté un défaut. */
+export interface CaptureDetection {
+  id: string;
+  defectId: string; // défaut consolidé (même identifiant que la carte)
+  type: DefectType;
+  severity: Severity;
+  confidence: number;
+  frameUrl?: string;
+  videoTime: string; // position dans la vidéo, « mm:ss »
+  position: LatLng;
+  roadName: string;
+  depthCm?: number;
+  isNew: boolean; // première observation de ce défaut
+}
+
+/** Un trajet filmé = une vidéo traitée par la chaîne vidéo (hors périmètre WP2 : service de traitement WP1). */
+export interface CaptureRun {
+  id: string;
+  vehicleId: string;
+  startedAt: string;
+  durationMin: number;
+  distanceKm: number;
+  videoMinutes: number;
+  framesExtracted: number;
+  framesAnalyzed: number;
+  framesBlurred: number; // images contenant visages / plaques floutés
+  track: [number, number][][]; // tracé GPS (une polyligne par tronçon parcouru)
+  pipeline: PipelineStep[];
+  detections: CaptureDetection[];
+  status: "publie" | "en_traitement";
+}
+
+export interface CaptureOverview {
+  vehicles: CaptureVehicle[];
+  runs: CaptureRun[];
+  /** true : données de démonstration (service de traitement vidéo non connecté). */
+  simulated: boolean;
+}
