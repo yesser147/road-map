@@ -1,0 +1,6 @@
+outs:
+- md5: aab5e06a74afcc7ef4cb53d1c3959918.dir
+  size: 290559907
+  nfiles: 2142
+  hash: md5
+  path: kent_potholes

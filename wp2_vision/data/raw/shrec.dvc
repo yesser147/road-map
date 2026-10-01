@@ -1,0 +1,6 @@
+outs:
+- md5: 214b49480dee6da091d8899709737521.dir
+  size: 7152027811
+  nfiles: 9269
+  hash: md5
+  path: shrec

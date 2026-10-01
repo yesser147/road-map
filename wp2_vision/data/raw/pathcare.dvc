@@ -1,0 +1,6 @@
+outs:
+- md5: 2bd9decd86de1be428ee35b05e6eb354.dir
+  size: 4254554722
+  nfiles: 390
+  hash: md5
+  path: pathcare

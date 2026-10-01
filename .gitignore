@@ -10,7 +10,10 @@ __pycache__/
 roadmap_api/data/
 
 # ---- WP2 : jeux de données téléchargés et sorties d'entraînement (lourds, régénérables) ----
-wp2_vision/data/
+wp2_vision/data/*
+!wp2_vision/data/raw/
+wp2_vision/data/raw/*
+!wp2_vision/data/raw/*.dvc
 wp2_vision/runs/
 wp2_vision/weights/
 wp2_vision/runs_train*.log

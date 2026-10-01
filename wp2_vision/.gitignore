@@ -1,5 +1,6 @@
 .venv/
-data/raw/
+data/raw/*
+!data/raw/*.dvc
 data/processed/
 runs/
 runs_train*.log

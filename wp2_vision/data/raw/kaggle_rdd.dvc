@@ -1,0 +1,6 @@
+outs:
+- md5: 7c117d4763cfe91329b959acf3c18adc.dir
+  size: 194786682
+  nfiles: 6031
+  hash: md5
+  path: kaggle_rdd
