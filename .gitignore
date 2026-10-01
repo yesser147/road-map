@@ -25,3 +25,7 @@ wp2_vision/demo/*.mp4
 
 # ---- document contractuel confidentiel (diffusion restreinte aux Parties) ----
 Contrat_RoadMap_Cartographie.pdf
+
+# ---- Claude Code (local) ----
+.claude/
+CLAUDE.md
