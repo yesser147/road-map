@@ -6,3 +6,4 @@ runs_train*.log
 __pycache__/
 *.pyc
 demo/*.mp4
+/models

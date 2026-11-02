@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import tn.roadmap.api.domain.DefectType;
 import tn.roadmap.api.service.AuthService;
 import tn.roadmap.api.service.ReportService;
+import tn.roadmap.api.service.VisionClient;
 import tn.roadmap.api.web.Dtos.MyReportDto;
 import tn.roadmap.api.web.Dtos.ReportDto;
 
@@ -37,9 +38,26 @@ public class CitizenController {
                             @RequestParam @DecimalMin("-90") @DecimalMax("90") double lat,
                             @RequestParam @DecimalMin("-180") @DecimalMax("180") double lng,
                             @RequestParam(required = false) String description,
-                            @RequestParam(required = false) String type) {
+                            @RequestParam(required = false) String type,
+                            @RequestParam(required = false) @DecimalMin("1") @DecimalMax("400") Double focal35,
+                            @RequestParam(required = false) @DecimalMin("0.5") @DecimalMax("100") Double focalMm,
+                            @RequestParam(required = false) @DecimalMin("-180") @DecimalMax("180") Double tiltBeta,
+                            @RequestParam(required = false) @DecimalMin("-90") @DecimalMax("90") Double tiltGamma,
+                            @RequestParam(required = false) String capture,
+                            @RequestParam(required = false) String posture) {
         DefectType hint = type == null || type.isBlank() ? null : DefectType.of(type);
-        return reports.submit(auth.current(a), photo, lat, lng, description, hint);
+        String cap = "camera".equals(capture) || "gallery".equals(capture) ? capture : null;
+
+        // hauteur du téléphone au-dessus de la route : debout ~1,40 m, accroupi ~0,75 m (cf. WP2 camera.py)
+        // switch (et non ternaire) : évite l'unboxing de null -> NullPointerException
+        Double height = switch (posture == null ? "" : posture) {
+            case "crouching" -> 0.75;
+            case "standing"  -> 1.40;
+            default          -> null;
+        };
+
+        var camera = new VisionClient.CameraMeta(focal35, focalMm, tiltBeta, tiltGamma, cap, height);
+        return reports.submit(auth.current(a), photo, lat, lng, description, hint, camera);
     }
 
     @GetMapping("/reports")

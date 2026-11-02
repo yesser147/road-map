@@ -8,6 +8,7 @@ import { api } from "@/api";
 import { DEFECT_LABEL } from "@/config/labels";
 import { PILOT_ZONE } from "@/mocks/generate";
 import type { CitizenReport, DefectType } from "@/types/domain";
+import { currentTilt, readExifFocal, startTiltTracking, type CameraMeta } from "./cameraMeta";
 
 type Step = "photo" | "position" | "details" | "sending" | "done";
 
@@ -96,6 +97,7 @@ function Recenter({ at }: { at: L.LatLngExpression }) {
 export default function ReportWizard() {
   const [step, setStep] = useState<Step>("photo");
   const [photo, setPhoto] = useState<File | null>(null);
+  const [camera, setCamera] = useState<CameraMeta>({});
   const [preview, setPreview] = useState<string | null>(null);
   const [pos, setPos] = useState<{ lat: number; lng: number } | null>(null);
   const [gps, setGps] = useState<{ state: "idle" | "locating" | "ok" | "unavailable"; accuracy?: number }>({ state: "idle" });
@@ -110,7 +112,7 @@ export default function ReportWizard() {
     if (preview) URL.revokeObjectURL(preview);
   }, [preview]);
 
-  async function onFile(picked?: File) {
+  async function onFile(picked: File | undefined, capture: "camera" | "gallery") {
     if (!picked) return;
     setError(null);
     // Copie immédiate en mémoire : sur Android, un fichier de la galerie n'est parfois lisible qu'une fois
@@ -122,6 +124,9 @@ export default function ReportWizard() {
       setError("Impossible de lire cette photo. Choisissez-la à nouveau dans la galerie ou prenez une nouvelle photo.");
       return;
     }
+    // focale lue AVANT la réduction (qui efface l'EXIF) ; inclinaison seulement pour une photo prise à l'instant
+    const exif = readExifFocal(await f.arrayBuffer());
+    setCamera({ ...exif, ...(capture === "camera" ? currentTilt() : {}), capture });
     let small: File;
     try {
       small = await shrink(f);
@@ -157,7 +162,7 @@ export default function ReportWizard() {
     setStep("sending");
     setError(null);
     try {
-      setResult(await api.submitReport({ photo, lat: pos.lat, lng: pos.lng, type, description: description.trim() || undefined }));
+      setResult(await api.submitReport({ photo, lat: pos.lat, lng: pos.lng, type, description: description.trim() || undefined, camera }));
       setStep("done");
     } catch (e) {
       setError((e as Error).message);
@@ -193,15 +198,15 @@ export default function ReportWizard() {
         <section className="stack" style={{ gap: 14 }}>
           <h2 className="cz-h2">Photographiez la dégradation</h2>
           <p className="muted" style={{ margin: 0 }}>Cadrez le défaut en entier, de jour si possible. Évitez de photographier des personnes.</p>
-          <button className="cz-shot" onClick={() => cameraRef.current?.click()}>
+          <button className="cz-shot" onClick={() => { void startTiltTracking(); cameraRef.current?.click(); }}>
             <Camera size={40} />
             <b>Prendre une photo</b>
             <span className="small">Ouvre l'appareil photo</span>
           </button>
           <button className="btn lg" onClick={() => galleryRef.current?.click()}><ImagePlus size={18} /> Choisir dans la galerie</button>
           {error && <div className="form-error">{error}</div>}
-          <input ref={cameraRef} type="file" accept="image/*" capture="environment" hidden onChange={(e) => { onFile(e.target.files?.[0]); e.target.value = ""; }} />
-          <input ref={galleryRef} type="file" accept="image/*" hidden onChange={(e) => { onFile(e.target.files?.[0]); e.target.value = ""; }} />
+          <input ref={cameraRef} type="file" accept="image/*" capture="environment" hidden onChange={(e) => { onFile(e.target.files?.[0], "camera"); e.target.value = ""; }} />
+          <input ref={galleryRef} type="file" accept="image/*" hidden onChange={(e) => { onFile(e.target.files?.[0], "gallery"); e.target.value = ""; }} />
         </section>
       )}
 
@@ -249,6 +254,17 @@ export default function ReportWizard() {
               <button key={c.type} type="button" className={type === c.type ? "on" : ""} onClick={() => setType(type === c.type ? undefined : c.type)}>{c.label}</button>
             ))}
           </div>
+          {camera.capture === "camera" && (
+            <div className="field">Photo prise
+              <div className="cz-types" role="radiogroup" aria-label="Position lors de la photo">
+                {([["standing", "Debout"], ["crouching", "Accroupi(e)"]] as const).map(([k, label]) => (
+                  <button key={k} type="button" role="radio" aria-checked={(camera.posture ?? "standing") === k}
+                    className={(camera.posture ?? "standing") === k ? "on" : ""} onClick={() => setCamera({ ...camera, posture: k })}>{label}</button>
+                ))}
+              </div>
+              <span className="small muted">Sert à estimer la taille du défaut.</span>
+            </div>
+          )}
           <label className="field">Commentaire <span className="muted">(facultatif)</span>
             <textarea className="input" rows={3} maxLength={1000} value={description} onChange={(e) => setDescription(e.target.value)}
               placeholder="Ex. : devant l'école, dangereux pour les deux-roues" />

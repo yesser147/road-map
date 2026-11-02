@@ -39,9 +39,9 @@ public class VisionClient {
 
     public record Result(boolean analyzed, boolean accepted, String reason, double blurScore, double roadScore,
                          DefectType type, Severity severity, double confidence,
-                         Double depthCm, Double lengthM, Double widthM) {
+                         Double depthCm, Double lengthM, Double widthM, String measureMethod, Double uncertaintyPct) {
         static Result unavailable() {
-            return new Result(false, true, null, 0, 0, null, null, 0, null, null, null);
+            return new Result(false, true, null, 0, 0, null, null, 0, null, null, null, null, null);
         }
     }
 
@@ -58,7 +58,16 @@ public class VisionClient {
         this.http = RestClient.builder().baseUrl(enabled ? url : "http://localhost").requestFactory(f).build();
     }
 
+    /** Ce que le téléphone sait de la prise de vue (tout facultatif) : focale EXIF et inclinaison. */
+    public record CameraMeta(Double focal35, Double focalMm, Double tiltBeta, Double tiltGamma, String capture, Double camHeightM) {
+        public static final CameraMeta NONE = new CameraMeta(null, null, null, null, null, null);
+    }
+
     public Result analyze(byte[] image, String filename, Double lat, Double lng) {
+        return analyze(image, filename, lat, lng, CameraMeta.NONE);
+    }
+
+    public Result analyze(byte[] image, String filename, Double lat, Double lng, CameraMeta cam) {
         if (!enabled) return Result.unavailable();
         try {
             var form = new LinkedMultiValueMap<String, Object>();
@@ -75,6 +84,14 @@ public class VisionClient {
                 form.add("lat", lat.toString());
                 form.add("lon", lng.toString());
             }
+            if (cam != null) { // permet au service de vision de mesurer en centimètres sans calibration
+                if (cam.focal35() != null) form.add("focal_35mm", cam.focal35().toString());
+                if (cam.focalMm() != null) form.add("focal_mm", cam.focalMm().toString());
+                if (cam.tiltBeta() != null) form.add("tilt_beta", cam.tiltBeta().toString());
+                if (cam.tiltGamma() != null) form.add("tilt_gamma", cam.tiltGamma().toString());
+                if (cam.capture() != null) form.add("capture", cam.capture());
+                if (cam.camHeightM() != null) form.add("cam_height_m", cam.camHeightM().toString());
+            }
             String body = http.post().uri("/v1/detect").contentType(MediaType.MULTIPART_FORM_DATA).body(form)
                     .retrieve().body(String.class);
             JsonNode ev = body == null ? null : JSON.readTree(body);
@@ -86,7 +103,8 @@ public class VisionClient {
             DefectType type = null;
             Severity severity = null;
             double conf = 0;
-            Double depth = null, length = null, width = null;
+            Double depth = null, length = null, width = null, uncertainty = null;
+            String method = null;
             for (JsonNode d : ev.path("detections")) {
                 DefectType t = CLASS_MAP.get(d.path("class_name").asString());
                 if (t != null && d.path("confidence").asDouble() > conf) {
@@ -95,6 +113,8 @@ public class VisionClient {
                     depth = num(d, "depth_cm");
                     length = num(d, "length_m");
                     width = num(d, "width_m");
+                    method = d.path("measure_method").isString() ? d.path("measure_method").asString() : null;
+                    uncertainty = num(d, "size_uncertainty_pct");
                     severity = switch (d.path("severity").asString()) {
                         case "high" -> Severity.ELEVEE;
                         case "medium" -> Severity.MOYENNE;
@@ -103,7 +123,7 @@ public class VisionClient {
                 }
             }
             return new Result(true, accepted, reason, q.path("blur_score").asDouble(), q.path("road_score").asDouble(0),
-                    type, severity, conf, depth, length, width);
+                    type, severity, conf, depth, length, width, method, uncertainty);
         } catch (Exception e) {
             log.warn("Service vision indisponible ({}), photo acceptée sans analyse", e.getMessage());
             return Result.unavailable();

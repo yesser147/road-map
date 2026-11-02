@@ -1,0 +1,5 @@
+[core]
+    remote = yesser-drive
+['remote "yesser-drive"']
+    url = gdrive://1v4Ni9jehu-mcwTadShZgVn5pt6k-yb62
+    gdrive_use_service_account = false

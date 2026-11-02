@@ -32,6 +32,8 @@ export interface NewReportInput {
   lng: number;
   description?: string;
   type?: DefectType;
+  /** focale EXIF et inclinaison du téléphone : servent à mesurer le défaut en centimètres */
+  camera?: import("@/citizen/cameraMeta").CameraMeta;
 }
 
 /**

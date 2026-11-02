@@ -1,0 +1,45 @@
+{
+ "model": "depth-anything/Depth-Anything-V2-Metric-Outdoor-Small-hf",
+ "before": {
+  "abs_rel": 1.3486,
+  "rmse": 6.2907,
+  "d1": 0.0099,
+  "mae_cm_near": 585.3748
+ },
+ "epoch_0": {
+  "abs_rel": 0.0353,
+  "rmse": 0.3121,
+  "d1": 0.995,
+  "mae_cm_near": 16.755
+ },
+ "epoch_1": {
+  "abs_rel": 0.0562,
+  "rmse": 0.3768,
+  "d1": 0.995,
+  "mae_cm_near": 25.843
+ },
+ "epoch_2": {
+  "abs_rel": 0.041,
+  "rmse": 0.3096,
+  "d1": 0.9968,
+  "mae_cm_near": 19.5262
+ },
+ "epoch_3": {
+  "abs_rel": 0.0245,
+  "rmse": 0.2303,
+  "d1": 0.9977,
+  "mae_cm_near": 11.7566
+ },
+ "epoch_4": {
+  "abs_rel": 0.0223,
+  "rmse": 0.2167,
+  "d1": 0.998,
+  "mae_cm_near": 10.5714
+ },
+ "epoch_5": {
+  "abs_rel": 0.0199,
+  "rmse": 0.2065,
+  "d1": 0.9982,
+  "mae_cm_near": 9.6012
+ }
+}

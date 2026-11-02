@@ -89,10 +89,22 @@ async def detect(
     with_depth: Optional[bool] = Form(None),
     with_embedding: bool = Form(True),
     conf: Optional[float] = Form(None),
+    focal_35mm: Optional[float] = Form(None),
+    focal_mm: Optional[float] = Form(None),
+    tilt_beta: Optional[float] = Form(None),
+    tilt_gamma: Optional[float] = Form(None),
+    capture: Optional[str] = Form(None),
+    cam_height_m: Optional[float] = Form(None),
 ):
     if source not in ("vehicle", "pedestrian", "citizen", "unknown"):
         raise HTTPException(422, "source must be vehicle|pedestrian|citizen|unknown")
-    img = _decode(await file.read())
+    data = await file.read()
+    img = _decode(data)
+    camera = {"focal_35mm": focal_35mm, "focal_mm": focal_mm, "tilt_beta": tilt_beta, "tilt_gamma": tilt_gamma,
+              "capture": capture, "cam_height_m": cam_height_m}
+    if not camera["focal_35mm"] and not camera["focal_mm"]:  # the uploaded file may still carry its EXIF
+        from .camera import exif_focal
+        camera.update({k: v for k, v in exif_focal(data).items() if v})
     gps = {"lat": lat, "lon": lon, "accuracy_m": accuracy_m, "heading_deg": heading_deg} if lat is not None and lon is not None else None
     p = pipe()
     old = p.detector.conf
@@ -100,7 +112,8 @@ async def detect(
         p.detector.conf = conf
     try:
         return p.analyze(img, image_id or uuid.uuid4().hex, source=source, gps=gps, captured_at=captured_at,
-                         filter_photo=filter_photo, with_depth=with_depth, with_embedding=with_embedding)
+                         filter_photo=filter_photo, with_depth=with_depth, with_embedding=with_embedding,
+                         camera=camera)
     finally:
         p.detector.conf = old
 

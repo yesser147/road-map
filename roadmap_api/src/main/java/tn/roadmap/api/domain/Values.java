@@ -16,9 +16,13 @@ public final class Values {
     public record LatLng(double lat, double lng) {
     }
 
-    /** Mesures du défaut ; null = non mesuré (jamais de valeur inventée). */
+    /** Mesures du défaut ; null = non mesuré (jamais de valeur inventée).
+     *  measureMethod / uncertaintyPct : comment les dimensions ont été obtenues et leur marge (±%), cf. WP2. */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public record Dimensions(Double lengthM, Double widthM, Double depthCm) {
+    public record Dimensions(Double lengthM, Double widthM, Double depthCm, String measureMethod, Double uncertaintyPct) {
+        public Dimensions(Double lengthM, Double widthM, Double depthCm) {
+            this(lengthM, widthM, depthCm, null, null);
+        }
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -41,13 +45,13 @@ public final class Values {
     /** Résultat de l'analyse automatique ; depthCm / lengthM / widthM : estimations WP2 (null si non calculées). */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public record Extraction(DefectType type, String location, Severity severityHint, double confidence, boolean schemaValid,
-                             Double depthCm, Double lengthM, Double widthM) {
+                             Double depthCm, Double lengthM, Double widthM, String measureMethod, Double uncertaintyPct) {
         public Extraction(DefectType type, String location, Severity severityHint, double confidence, boolean schemaValid) {
-            this(type, location, severityHint, confidence, schemaValid, null, null, null);
+            this(type, location, severityHint, confidence, schemaValid, null, null, null, null, null);
         }
 
         public Extraction withLocation(String loc) {
-            return new Extraction(type, loc, severityHint, confidence, schemaValid, depthCm, lengthM, widthM);
+            return new Extraction(type, loc, severityHint, confidence, schemaValid, depthCm, lengthM, widthM, measureMethod, uncertaintyPct);
         }
     }
 

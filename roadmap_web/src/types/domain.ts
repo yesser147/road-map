@@ -78,7 +78,12 @@ export interface Defect {
   roadName: string;
   district: string;
   /** Mesures ; absentes = non mesurées (jamais de valeur inventée). */
-  dimensions: { lengthM?: number; widthM?: number; depthCm?: number };
+  dimensions: {
+    lengthM?: number; widthM?: number; depthCm?: number;
+    /** comment les dimensions ont été obtenues (WP2) et leur marge typique (±%) */
+    measureMethod?: "vehicle_calibrated" | "citizen_geometry" | "citizen_estimate";
+    uncertaintyPct?: number;
+  };
   firstSeen: string;
   lastSeen: string;
   observations: Observation[];
@@ -129,6 +134,8 @@ export interface CitizenReport {
     depthCm?: number;
     lengthM?: number;
     widthM?: number;
+    measureMethod?: "vehicle_calibrated" | "citizen_geometry" | "citizen_estimate";
+    uncertaintyPct?: number;
   };
   /** analyzed=false : service vision indisponible au dépôt, photo acceptée sans analyse. */
   photoCheck?: { accepted: boolean; reason?: string; blurScore: number; roadScore: number; analyzed?: boolean };

@@ -70,13 +70,19 @@ export const httpApi: RoadMapApi = {
   listReports: () => http("/reports"),
   reviewReport: (id, decision, defectId) => http(`/reports/${encodeURIComponent(id)}/review`, post({ decision, defectId })),
 
-  submitReport: ({ photo, lat, lng, description, type }) => {
+  submitReport: ({ photo, lat, lng, description, type, camera }) => {
     const form = new FormData();
     form.append("photo", photo);
     form.append("lat", String(lat));
     form.append("lng", String(lng));
     if (description) form.append("description", description);
     if (type) form.append("type", type);
+    if (camera?.focal35) form.append("focal35", String(camera.focal35));
+    if (camera?.focalMm) form.append("focalMm", String(camera.focalMm));
+    if (camera?.tiltBeta !== undefined) form.append("tiltBeta", String(camera.tiltBeta));
+    if (camera?.tiltGamma !== undefined) form.append("tiltGamma", String(camera.tiltGamma));
+    if (camera?.capture) form.append("capture", camera.capture);
+    if (camera?.capture === "camera") form.append("posture", camera.posture ?? "standing");
     return http("/citizen/reports", { method: "POST", body: form });
   },
   myReports: () => http("/citizen/reports"),

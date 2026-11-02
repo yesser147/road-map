@@ -62,6 +62,8 @@
           "depth_method": {"type": ["string", "null"]},
           "length_m": {"type": ["number", "null"], "description": "Estimated length (m, along the road) from the depth map. Null when depth was not computed."},
           "width_m": {"type": ["number", "null"], "description": "Estimated width (m) from the depth map. Null when depth was not computed."},
+          "measure_method": {"enum": ["vehicle_calibrated", "citizen_geometry", "citizen_estimate", null], "description": "How length/width/depth were obtained (optional, added in 1.1)."},
+          "size_uncertainty_pct": {"type": ["number", "null"], "description": "Typical +/- relative error of length/width for this method (optional, added in 1.1)."},
           "severity": {"enum": ["low", "medium", "high"]},
           "severity_score": {"type": "number", "minimum": 0, "maximum": 1},
           "embedding": {"type": ["array", "null"], "items": {"type": "number"}, "description": "Optional appearance vector of the crop, used for duplicate merging."}

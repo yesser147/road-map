@@ -41,6 +41,7 @@ def main():
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--lr", type=float, default=0.001)
     ap.add_argument("--promote", action="store_true", help="copy best.pt to models/roadvision_best.pt")
+    ap.add_argument("--scale", type=float, default=0.5, help="zoom augmentation; 0.9 adds close-up views (citizen photos)")
     a = ap.parse_args()
 
     run_dir = ROOT / "runs" / a.name
@@ -55,7 +56,7 @@ def main():
             freeze=a.freeze or None, save_period=1, plots=True, seed=0, deterministic=False,
             # road-specific augmentation: no vertical flip (sky/road orientation matters),
             # brightness/HSV jitter to emulate dusk and wet asphalt
-            fliplr=0.5, flipud=0.0, hsv_v=0.5, hsv_s=0.6, degrees=0.0, mosaic=1.0, close_mosaic=5,
+            fliplr=0.5, flipud=0.0, hsv_v=0.5, hsv_s=0.6, degrees=0.0, scale=a.scale, mosaic=1.0, close_mosaic=5,
         )
     best = run_dir / "weights" / "best.pt"
     if best.exists() and a.promote:

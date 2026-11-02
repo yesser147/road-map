@@ -17,6 +17,10 @@ DETECTOR_CANDIDATES = [
     MODELS / "rdd2022_yolov8s.pt",      # pretrained baseline (4 classes, no manhole)
 ]
 DEPTH_MODEL_ID = "depth-anything/Depth-Anything-V2-Small-hf"
+# Dimension module (reports/dimensions_report.md): geometry from the original metric model, depth of the hole
+# from the model fine-tuned on RSRD road surfaces, outline from the pothole segmentation model.
+RELIEF_MODEL_DIR = MODELS / "depth_finetuned"
+POTHOLE_SEG_WEIGHTS = MODELS / "pothole_seg.pt"
 
 
 def load_classes() -> dict[int, dict]:

@@ -43,6 +43,11 @@ class Detection(BaseModel):
     # Dimensions estimées (m) à partir de la carte de profondeur ; null si la profondeur n'a pas été calculée.
     length_m: Optional[float] = None
     width_m: Optional[float] = None
+    # Comment les dimensions ont été obtenues et leur incertitude typique (±%), cf. reports/dimensions_report.md :
+    #   vehicle_calibrated : caméra embarquée, hauteur connue ; citizen_geometry : focale + inclinaison du téléphone
+    #   + hauteur de prise de vue ; citizen_estimate : sans inclinaison, ordre de grandeur seulement.
+    measure_method: Optional[Literal["vehicle_calibrated", "citizen_geometry", "citizen_estimate"]] = None
+    size_uncertainty_pct: Optional[float] = None
     severity: Literal["low", "medium", "high"]
     severity_score: float = Field(ge=0, le=1)
     embedding: Optional[list[float]] = None

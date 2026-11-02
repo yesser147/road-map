@@ -9,6 +9,20 @@ import { SeverityBadge, SourceTag, StatusBadge } from "./Badges";
 import { PriorityBreakdown, ScorePill } from "./PriorityBreakdown";
 
 /** Ouvre / ferme la fiche via le paramètre d'URL ?defect=ID (partageable, bouton retour du navigateur). */
+/** Origine des dimensions (WP2) : la précision dépend de ce que l'on sait de la caméra. */
+const MEASURE_LABEL = {
+  vehicle_calibrated: "Mesuré par la caméra embarquée",
+  citizen_geometry: "Estimé depuis la photo citoyenne (focale et inclinaison du téléphone)",
+  citizen_estimate: "Ordre de grandeur depuis une photo sans informations de prise de vue",
+} as const;
+
+/** Une estimation grossière est arrondie, pour ne pas afficher une précision qu'elle n'a pas. */
+function fmtSize(m: number | undefined, method?: keyof typeof MEASURE_LABEL): string {
+  if (m == null) return "—";
+  if (method === "citizen_estimate") return `≈ ${(Math.round(m * 10) / 10).toLocaleString("fr-FR")} m`;
+  return `${(Math.round(m * 100) / 100).toLocaleString("fr-FR")} m`;
+}
+
 export function useDefectDrawer() {
   const [params, setParams] = useSearchParams();
   return {
@@ -97,9 +111,15 @@ export function DefectDrawer() {
 
               <section>
                 <h4>Mesures</h4>
+                {defect.dimensions.measureMethod && (
+                  <div className="small muted" style={{ marginBottom: 6 }}>
+                    {MEASURE_LABEL[defect.dimensions.measureMethod]}
+                    {defect.dimensions.uncertaintyPct != null && ` · marge ± ${defect.dimensions.uncertaintyPct} %`}
+                  </div>
+                )}
                 <div className="kv">
-                  <div><div className="k"><Ruler size={11} /> Longueur</div><div className="v num">{defect.dimensions.lengthM != null ? `${defect.dimensions.lengthM} m` : "—"}</div></div>
-                  <div><div className="k">Largeur</div><div className="v num">{defect.dimensions.widthM != null ? `${defect.dimensions.widthM} m` : "—"}</div></div>
+                  <div><div className="k"><Ruler size={11} /> Longueur</div><div className="v num">{fmtSize(defect.dimensions.lengthM, defect.dimensions.measureMethod)}</div></div>
+                  <div><div className="k">Largeur</div><div className="v num">{fmtSize(defect.dimensions.widthM, defect.dimensions.measureMethod)}</div></div>
                   <div><div className="k">Profondeur</div><div className="v num">{defect.dimensions.depthCm !== undefined ? `${defect.dimensions.depthCm} cm` : "—"}</div></div>
                   <div><div className="k">Première détection</div><div className="v">{fmtDate(defect.firstSeen)}</div></div>
                   <div><div className="k">Dernier passage</div><div className="v">{fmtDate(defect.lastSeen)}</div></div>

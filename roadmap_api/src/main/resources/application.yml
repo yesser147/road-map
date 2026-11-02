@@ -41,7 +41,8 @@ roadmap:
   # Mot de passe des comptes de démonstration (voir README). À désactiver en production.
   demo-password: ${ROADMAP_DEMO_PASSWORD:Demo2026!}
   # Origines autorisées (motifs). Dev : Vite en local et depuis un téléphone du réseau local.
-  cors-origins: ${ROADMAP_CORS_ORIGINS:http://localhost:*,https://localhost:*,http://127.0.0.1:*,http://192.168.*:*,https://192.168.*:*}
+  # adresses de réseau local (le téléphone passe par l'IP Wi-Fi du PC, qui change selon le réseau)
+  cors-origins: ${ROADMAP_CORS_ORIGINS:http://localhost:*,https://localhost:*,http://127.0.0.1:*,http://192.168.*:*,https://192.168.*:*,http://10.*:*,https://10.*:*,http://172.*:*,https://172.*:*}
 
 management:
   endpoints:

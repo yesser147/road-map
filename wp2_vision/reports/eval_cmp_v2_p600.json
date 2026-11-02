@@ -1,0 +1,411 @@
+{
+  "weights": "models/roadvision_best.pt",
+  "detector_classes": {
+    "0": "longitudinal_crack",
+    "1": "transverse_crack",
+    "2": "alligator_crack",
+    "3": "pothole",
+    "4": "manhole"
+  },
+  "conf": 0.25,
+  "imgsz": 640,
+  "ms_per_image_median": 10.7,
+  "threshold_sweep": {
+    "all": [
+      {
+        "conf": 0.15,
+        "precision": 0.5763,
+        "recall": 0.1323,
+        "manhole_fa": null
+      },
+      {
+        "conf": 0.2,
+        "precision": 0.7059,
+        "recall": 0.0934,
+        "manhole_fa": null
+      },
+      {
+        "conf": 0.25,
+        "precision": 0.7647,
+        "recall": 0.0506,
+        "manhole_fa": null
+      },
+      {
+        "conf": 0.3,
+        "precision": 0.8667,
+        "recall": 0.0506,
+        "manhole_fa": null
+      },
+      {
+        "conf": 0.35,
+        "precision": 0.9091,
+        "recall": 0.0389,
+        "manhole_fa": null
+      },
+      {
+        "conf": 0.4,
+        "precision": 0.8889,
+        "recall": 0.0311,
+        "manhole_fa": null
+      },
+      {
+        "conf": 0.5,
+        "precision": 0.8333,
+        "recall": 0.0195,
+        "manhole_fa": null
+      },
+      {
+        "conf": 0.6,
+        "precision": 1.0,
+        "recall": 0.0039,
+        "manhole_fa": null
+      },
+      {
+        "conf": 0.7,
+        "precision": null,
+        "recall": 0.0,
+        "manhole_fa": null
+      }
+    ],
+    "day+dry": [
+      {
+        "conf": 0.15,
+        "precision": 0.5763,
+        "recall": 0.1323,
+        "manhole_fa": null
+      },
+      {
+        "conf": 0.2,
+        "precision": 0.7059,
+        "recall": 0.0934,
+        "manhole_fa": null
+      },
+      {
+        "conf": 0.25,
+        "precision": 0.7647,
+        "recall": 0.0506,
+        "manhole_fa": null
+      },
+      {
+        "conf": 0.3,
+        "precision": 0.8667,
+        "recall": 0.0506,
+        "manhole_fa": null
+      },
+      {
+        "conf": 0.35,
+        "precision": 0.9091,
+        "recall": 0.0389,
+        "manhole_fa": null
+      },
+      {
+        "conf": 0.4,
+        "precision": 0.8889,
+        "recall": 0.0311,
+        "manhole_fa": null
+      },
+      {
+        "conf": 0.5,
+        "precision": 0.8333,
+        "recall": 0.0195,
+        "manhole_fa": null
+      },
+      {
+        "conf": 0.6,
+        "precision": 1.0,
+        "recall": 0.0039,
+        "manhole_fa": null
+      },
+      {
+        "conf": 0.7,
+        "precision": null,
+        "recall": 0.0,
+        "manhole_fa": null
+      }
+    ]
+  },
+  "splits": {
+    "all": {
+      "images": 240,
+      "per_class": {
+        "longitudinal_crack": {
+          "n_gt": 0,
+          "ap50": null,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        "transverse_crack": {
+          "n_gt": 0,
+          "ap50": null,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        "alligator_crack": {
+          "n_gt": 0,
+          "ap50": null,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        "pothole": {
+          "n_gt": 257,
+          "ap50": 0.2404,
+          "precision": 0.7647,
+          "recall": 0.0506,
+          "f1": 0.0949
+        },
+        "manhole": {
+          "n_gt": 0,
+          "ap50": null,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        }
+      },
+      "defects_overall": {
+        "precision": 0.7647,
+        "recall": 0.0506,
+        "map50": 0.2404
+      },
+      "manhole_false_alarm_rate": null,
+      "manholes_evaluated": 0
+    },
+    "cracks_merged": {
+      "images": 240,
+      "per_class": {
+        "longitudinal_crack": {
+          "n_gt": 0,
+          "ap50": null,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        "transverse_crack": {
+          "n_gt": 0,
+          "ap50": null,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        "alligator_crack": {
+          "n_gt": 0,
+          "ap50": null,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        "pothole": {
+          "n_gt": 257,
+          "ap50": 0.2404,
+          "precision": 0.7647,
+          "recall": 0.0506,
+          "f1": 0.0949
+        },
+        "manhole": {
+          "n_gt": 0,
+          "ap50": null,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        }
+      },
+      "defects_overall": {
+        "precision": 0.7647,
+        "recall": 0.0506,
+        "map50": 0.2404
+      },
+      "manhole_false_alarm_rate": null,
+      "manholes_evaluated": 0
+    },
+    "day+dry": {
+      "images": 240,
+      "per_class": {
+        "longitudinal_crack": {
+          "n_gt": 0,
+          "ap50": null,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        "transverse_crack": {
+          "n_gt": 0,
+          "ap50": null,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        "alligator_crack": {
+          "n_gt": 0,
+          "ap50": null,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        "pothole": {
+          "n_gt": 257,
+          "ap50": 0.2404,
+          "precision": 0.7647,
+          "recall": 0.0506,
+          "f1": 0.0949
+        },
+        "manhole": {
+          "n_gt": 0,
+          "ap50": null,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        }
+      },
+      "defects_overall": {
+        "precision": 0.7647,
+        "recall": 0.0506,
+        "map50": 0.2404
+      },
+      "manhole_false_alarm_rate": null,
+      "manholes_evaluated": 0
+    },
+    "light=day": {
+      "images": 240,
+      "per_class": {
+        "longitudinal_crack": {
+          "n_gt": 0,
+          "ap50": null,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        "transverse_crack": {
+          "n_gt": 0,
+          "ap50": null,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        "alligator_crack": {
+          "n_gt": 0,
+          "ap50": null,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        "pothole": {
+          "n_gt": 257,
+          "ap50": 0.2404,
+          "precision": 0.7647,
+          "recall": 0.0506,
+          "f1": 0.0949
+        },
+        "manhole": {
+          "n_gt": 0,
+          "ap50": null,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        }
+      },
+      "defects_overall": {
+        "precision": 0.7647,
+        "recall": 0.0506,
+        "map50": 0.2404
+      },
+      "manhole_false_alarm_rate": null,
+      "manholes_evaluated": 0
+    },
+    "source=unknown": {
+      "images": 240,
+      "per_class": {
+        "longitudinal_crack": {
+          "n_gt": 0,
+          "ap50": null,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        "transverse_crack": {
+          "n_gt": 0,
+          "ap50": null,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        "alligator_crack": {
+          "n_gt": 0,
+          "ap50": null,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        "pothole": {
+          "n_gt": 257,
+          "ap50": 0.2404,
+          "precision": 0.7647,
+          "recall": 0.0506,
+          "f1": 0.0949
+        },
+        "manhole": {
+          "n_gt": 0,
+          "ap50": null,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        }
+      },
+      "defects_overall": {
+        "precision": 0.7647,
+        "recall": 0.0506,
+        "map50": 0.2404
+      },
+      "manhole_false_alarm_rate": null,
+      "manholes_evaluated": 0
+    },
+    "surface=dry": {
+      "images": 240,
+      "per_class": {
+        "longitudinal_crack": {
+          "n_gt": 0,
+          "ap50": null,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        "transverse_crack": {
+          "n_gt": 0,
+          "ap50": null,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        "alligator_crack": {
+          "n_gt": 0,
+          "ap50": null,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        "pothole": {
+          "n_gt": 257,
+          "ap50": 0.2404,
+          "precision": 0.7647,
+          "recall": 0.0506,
+          "f1": 0.0949
+        },
+        "manhole": {
+          "n_gt": 0,
+          "ap50": null,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        }
+      },
+      "defects_overall": {
+        "precision": 0.7647,
+        "recall": 0.0506,
+        "map50": 0.2404
+      },
+      "manhole_false_alarm_rate": null,
+      "manholes_evaluated": 0
+    }
+  }
+}

@@ -57,6 +57,11 @@ public class ReportService {
 
     @Transactional
     public ReportDto submit(AppUser author, MultipartFile photo, double lat, double lng, String description, DefectType hint) {
+        return submit(author, photo, lat, lng, description, hint, VisionClient.CameraMeta.NONE);
+    }
+
+    public ReportDto submit(AppUser author, MultipartFile photo, double lat, double lng, String description, DefectType hint,
+                            VisionClient.CameraMeta camera) {
         if (photo == null || photo.isEmpty()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Photo manquante");
         if (photo.getContentType() == null || !IMAGE_TYPES.contains(photo.getContentType())) {
             throw new ResponseStatusException(HttpStatus.UNSUPPORTED_MEDIA_TYPE, "Formats acceptés : JPEG, PNG, WebP, HEIC");
@@ -88,7 +93,7 @@ public class ReportService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Enregistrement de la photo impossible");
         }
 
-        VisionClient.Result v = vision.analyze(bytes, photo.getOriginalFilename(), lat, lng);
+        VisionClient.Result v = vision.analyze(bytes, photo.getOriginalFilename(), lat, lng, camera);
         DefectType type = v.type() != null ? v.type() : hint;
         String road = locate(lat, lng);
 
@@ -106,7 +111,7 @@ public class ReportService {
         if (v.accepted()) {
             Severity sev = v.depthCm() != null && type == DefectType.NID_DE_POULE ? EstimationService.severityFromDepth(v.depthCm()) : v.severity();
             r.setExtraction(new Extraction(type, road, sev, v.analyzed() ? round2(v.confidence()) : 0, type != null,
-                    v.depthCm(), v.lengthM(), v.widthM()));
+                    v.depthCm(), v.lengthM(), v.widthM(), v.measureMethod(), v.uncertaintyPct()));
             r.setMatchedDefectId(findMatch(type, lat, lng));
             r.setState(ReportState.A_VALIDER);
         } else {
@@ -195,7 +200,7 @@ public class ReportService {
                 : r.getExtraction() != null && r.getExtraction().location() != null && !r.getExtraction().location().startsWith("Position GPS")
                 ? r.getExtraction().location() : "Voie de desserte");
         d.setDistrict(NetworkService.districtOf(r.getLat(), r.getLng()));
-        d.setDimensions(new Dimensions(len, wid, depth));
+        d.setDimensions(new Dimensions(len, wid, depth, x == null ? null : x.measureMethod(), x == null ? null : x.uncertaintyPct()));
         d.setFirstSeen(r.getReceivedAt());
         d.setLastSeen(r.getReceivedAt());
         d.setObservations(new ArrayList<>());

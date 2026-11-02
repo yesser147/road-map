@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Phase de test : le backend Road Map tourne sur le PC du réseau local, en HTTP (port 8080).
+     En production l'API sera servie en HTTPS et ce fichier n'autorisera plus le HTTP. -->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system"/>
+        </trust-anchors>
+    </base-config>
+</network-security-config>
